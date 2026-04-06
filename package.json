@@ -1,0 +1,26 @@
+{
+  "name": "solostack-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that pulls live data from Reddit, GitHub Trending & Hacker News — then helps you discover the best tools for solo developers and indie hackers.",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "solostack-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

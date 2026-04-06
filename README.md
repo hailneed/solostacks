@@ -1,38 +1,86 @@
-# SoloStacks — Weekly AI Tools Radar
+# solostack-mcp
 
-> Solo developer ve indie hacker'lar için haftalık trend AI araçları, GitHub repoları ve ekosistem gelişmeleri.
+MCP server that pulls **live data** from Reddit, GitHub Trending & Hacker News — then helps you discover the best tools for solo developers and indie hackers, right inside your AI assistant.
 
----
+## Tools
 
-## Nasıl Çalışır?
+| Tool | Description |
+|------|-------------|
+| `get_latest_tool_stack` | Fetches live data and surfaces trending tools across all categories. Optional `focus` param (e.g. `"AI tools"`, `"database"`). |
+| `get_tools_by_category` | Deep-dives into a specific category (e.g. `"Auth & Payments"`, `"Deployment & Hosting"`). |
+| `compare_tools` | Side-by-side comparison of two tools for solo dev use cases. |
 
-Her hafta Reddit (r/LocalLLaMA, r/SaaS, r/programming, r/artificial), GitHub Trending ve Hacker News verileri analiz edilerek en dikkat çeken AI araçları ve gelişmeler derlenir.
+**Categories covered:** AI Coding & Dev Tools · Deployment & Hosting · Database & Backend · Auth & Payments · UI / Design · Marketing & Distribution · Productivity & Automation · Analytics & Monitoring
 
----
+## Installation
 
-## Raporlar
+### Option 1 — npx (no install)
 
-| Tarih | Başlık |
-|-------|--------|
-| [06 Nisan 2026](reports/2026-04-06.md) | Gemma 4 patlaması & Coding Agent ekosistemi |
+Add to your `claude_desktop_config.json` or `~/.claude.json`:
 
----
+```json
+{
+  "mcpServers": {
+    "solostack": {
+      "command": "npx",
+      "args": ["-y", "github:hailneed/solostacks"]
+    }
+  }
+}
+```
 
-## Kategoriler
+### Option 2 — Clone & build
 
-- **AI Coding & Dev Tools** — Coding agent'lar, LLM araçları, IDE entegrasyonları
-- **Deployment & Hosting** — Serverless, edge, container platformları
-- **Database & Backend** — BaaS, vektör DB, realtime
-- **Auth & Payments** — Auth, abonelik, ödeme altyapıları
-- **UI / Design** — Component kütüphaneleri, design sistemleri
-- **Productivity & Automation** — Workflow, otomasyon araçları
+```bash
+git clone https://github.com/hailneed/solostacks.git
+cd solostacks
+npm install
+npm run build
+```
 
----
+Then add to your MCP config:
 
-## Katkı
+```json
+{
+  "mcpServers": {
+    "solostack": {
+      "command": "node",
+      "args": ["/path/to/solostacks/dist/index.js"]
+    }
+  }
+}
+```
 
-Pull request veya issue açarak araç önerisi yapabilirsin.
+### Claude Code (CLI)
 
----
+```bash
+claude mcp add solostack -- npx -y github:hailneed/solostacks
+```
 
-*Veriler [SoloStack MCP](https://github.com/hailneed/solostack-mcp) tarafından sağlanmaktadır.*
+## Usage
+
+Once connected, ask your AI assistant:
+
+- *"Show me this week's trending tools"*
+- *"What are the best database tools for solo devs right now?"*
+- *"Compare Supabase vs PlanetScale"*
+- *"Get latest AI tools"*
+
+## Data Sources
+
+- **Reddit** — r/SaaS, r/webdev, r/MachineLearning, r/programming, r/artificial, r/LocalLLaMA, r/entrepreneur, r/startups
+- **GitHub Trending** — GitHub Search API, sorted by stars (last 7 days)
+- **Hacker News** — Firebase API, top stories with score > 100
+
+No API keys required. All public endpoints.
+
+## Development
+
+```bash
+npm run dev   # run with tsx (no build step)
+npm run build # compile to dist/
+```
+
+## License
+
+MIT
