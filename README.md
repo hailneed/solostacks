@@ -2,23 +2,29 @@
 
 MCP server that pulls **live data** from Reddit, GitHub Trending & Hacker News — then helps you discover the best tools for solo developers and indie hackers, right inside your AI assistant.
 
-## Tools
+Two modes: **generic** (works for everyone) and **role-based** (personalized to your job).
+
+---
+
+## Generic Server
+
+Works out of the box. No config needed.
+
+### Tools
 
 | Tool | Description |
 |------|-------------|
-| `get_latest_tool_stack` | Fetches live data and surfaces trending tools across all categories. Optional `focus` param (e.g. `"AI tools"`, `"database"`). |
-| `get_tools_by_category` | Deep-dives into a specific category (e.g. `"Auth & Payments"`, `"Deployment & Hosting"`). |
-| `compare_tools` | Side-by-side comparison of two tools for solo dev use cases. |
+| `get_latest_tool_stack` | Live data → trending tools across all categories. Optional `focus` param. |
+| `get_tools_by_category` | Deep-dive into a category (e.g. `"Auth & Payments"`). |
+| `compare_tools` | Side-by-side comparison of two tools. |
 
-**Categories covered:** AI Coding & Dev Tools · Deployment & Hosting · Database & Backend · Auth & Payments · UI / Design · Marketing & Distribution · Productivity & Automation · Analytics & Monitoring
+### Install
 
-## Installation
+```bash
+# Claude Code
+claude mcp add solostack -- npx -y github:hailneed/solostacks
 
-### Option 1 — npx (no install)
-
-Add to your `claude_desktop_config.json` or `~/.claude.json`:
-
-```json
+# claude_desktop_config.json / ~/.claude.json
 {
   "mcpServers": {
     "solostack": {
@@ -29,57 +35,126 @@ Add to your `claude_desktop_config.json` or `~/.claude.json`:
 }
 ```
 
-### Option 2 — Clone & build
+---
+
+## Role-Based / Custom Server
+
+Personalized data filtered for your role. Subreddits, categories, and AI prompts are all tuned to what matters to **you**.
+
+### Built-in Roles
+
+| Role | Best for |
+|------|----------|
+| `designer` | UI/UX, design systems, Figma ecosystem, CSS |
+| `developer` | Full-stack, open-source, DX-focused tooling |
+| `marketer` | SEO, growth, email, analytics, distribution |
+| `founder` | Indie hacker / SaaS — auth, payments, launch |
+| `ml-engineer` | LLMs, local inference, vector DBs, agents |
+
+### Tools
+
+| Tool | Description |
+|------|-------------|
+| `get_stack_for_role` | Live data filtered and framed for your role. Optional `role` + `focus` params. |
+| `get_tools_by_category` | Category deep-dive from your role's perspective. |
+| `compare_tools` | Tool comparison tailored to your use case. |
+| `list_roles` | Lists all available built-in roles. |
+
+### Install
 
 ```bash
-git clone https://github.com/hailneed/solostacks.git
-cd solostacks
-npm install
-npm run build
-```
+# Claude Code
+claude mcp add solostack-custom -- npx -y github:hailneed/solostacks/custom
 
-Then add to your MCP config:
-
-```json
+# claude_desktop_config.json / ~/.claude.json
 {
   "mcpServers": {
-    "solostack": {
-      "command": "node",
-      "args": ["/path/to/solostacks/dist/index.js"]
+    "solostack-custom": {
+      "command": "npx",
+      "args": ["-y", "github:hailneed/solostacks", "--", "--custom"],
+      "env": {
+        "SOLOSTACK_ROLE": "designer"
+      }
     }
   }
 }
 ```
 
-### Claude Code (CLI)
+Or clone and run locally (recommended for custom config):
 
 ```bash
-claude mcp add solostack -- npx -y github:hailneed/solostacks
+git clone https://github.com/hailneed/solostacks.git
+cd solostacks
+npm install && npm run build
 ```
 
-## Usage
+```json
+{
+  "mcpServers": {
+    "solostack-custom": {
+      "command": "node",
+      "args": ["/path/to/solostacks/dist/custom.js"],
+      "env": {
+        "SOLOSTACK_ROLE": "designer"
+      }
+    }
+  }
+}
+```
 
-Once connected, ask your AI assistant:
+### Customize with a config file
 
-- *"Show me this week's trending tools"*
-- *"What are the best database tools for solo devs right now?"*
-- *"Compare Supabase vs PlanetScale"*
-- *"Get latest AI tools"*
+Copy the example config to your project root:
+
+```bash
+cp solostack.config.example.json solostack.config.json
+```
+
+Then edit `solostack.config.json`:
+
+```json
+{
+  "role": "designer",
+  "customProfile": {
+    "subreddits": ["web_design", "UI_Design", "Figma", "webdev"],
+    "focusCategories": ["UI / Design", "AI Coding & Dev Tools"],
+    "keywords": ["figma", "framer", "tailwind", "animation"],
+    "promptTone": "I am a product designer who codes. Focus on design-engineering tools."
+  }
+}
+```
+
+Config is loaded from the **current working directory** when the server starts. You can also use the `SOLOSTACK_ROLE` environment variable for a quick role switch.
+
+### Override role per-call
+
+You can override the role at call time without changing config:
+
+> *"Get the stack for role: ml-engineer"*  
+> *"Compare Supabase vs PlanetScale for a founder"*  
+> *"Show me AI tools from a designer's perspective"*
+
+---
 
 ## Data Sources
 
-- **Reddit** — r/SaaS, r/webdev, r/MachineLearning, r/programming, r/artificial, r/LocalLLaMA, r/entrepreneur, r/startups
+- **Reddit** — role-specific subreddits, hot posts scored > 50 this week
 - **GitHub Trending** — GitHub Search API, sorted by stars (last 7 days)
-- **Hacker News** — Firebase API, top stories with score > 100
+- **Hacker News** — Firebase API, top stories score > 100
 
 No API keys required. All public endpoints.
+
+---
 
 ## Development
 
 ```bash
-npm run dev   # run with tsx (no build step)
-npm run build # compile to dist/
+npm run dev          # generic server (tsx, no build)
+npm run dev:custom   # custom server (tsx, no build)
+npm run build        # compile both to dist/
 ```
+
+---
 
 ## License
 

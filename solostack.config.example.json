@@ -1,0 +1,35 @@
+{
+  "_comment": "Copy this file to solostack.config.json and customize it.",
+
+  "role": "designer",
+
+  "language": "en",
+
+  "customProfile": {
+    "label": "My Custom Role",
+
+    "subreddits": [
+      "web_design",
+      "UI_Design",
+      "uxdesign",
+      "Figma"
+    ],
+
+    "focusCategories": [
+      "UI / Design",
+      "AI Coding & Dev Tools",
+      "Productivity & Automation"
+    ],
+
+    "keywords": [
+      "figma",
+      "design system",
+      "framer",
+      "tailwind",
+      "animation",
+      "component"
+    ],
+
+    "promptTone": "I am a product designer who codes. Focus on design tools, AI-assisted design, CSS frameworks, and anything that bridges design and engineering."
+  }
+}

@@ -5,12 +5,15 @@
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "solostack-mcp": "./dist/index.js"
+    "solostack-mcp": "./dist/index.js",
+    "solostack-custom": "./dist/custom.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
-    "start": "node dist/index.js"
+    "dev:custom": "tsx src/custom.ts",
+    "start": "node dist/index.js",
+    "start:custom": "node dist/custom.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.0"
